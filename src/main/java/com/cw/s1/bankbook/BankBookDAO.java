@@ -6,19 +6,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.cw.s1.util.DBConnector;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import com.cw.s1.util.DBConnect;
+
+@Repository
 public class BankBookDAO {
 	
-	private DBConnector dbConnector;
+	private DBConnect dbConnect;
 	
 	public BankBookDAO() {
-		dbConnector=new DBConnector();
+		
 	}
 	
+	@Autowired
+	public BankBookDAO(DBConnect dbConnect) {
+		this.dbConnect = dbConnect;
+	}
+	public void setDbConnect(DBConnect dbConnect) {
+		this.dbConnect = dbConnect;
+	}
 	//setInsert
 	public int setInsert(BankBookDTO bankBookDTO) {
-		Connection con=dbConnector.getConnect();
+		Connection con=dbConnect.getConnect();
 		PreparedStatement st=null;
 		ResultSet rs=null;
 		int result = 0;
@@ -37,14 +48,14 @@ public class BankBookDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			dbConnector.disConnect(st, con);
+			dbConnect.disConnect(st, con);
 		}
 		return result;
 	}
 	
 	
 	public ArrayList<BankBookDTO> getList() {
-		Connection con=dbConnector.getConnect();
+		Connection con=dbConnect.getConnect();
 		PreparedStatement st=null;
 		ResultSet rs=null;
 		ArrayList<BankBookDTO> ar = new ArrayList<BankBookDTO>();
@@ -66,14 +77,14 @@ public class BankBookDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			dbConnector.disConnect(rs, st, con);
+			dbConnect.disConnect(rs, st, con);
 		}
 		return ar;
 	}
 	
 	public BankBookDTO getSelect(BankBookDTO bankBookDTO) {
 		
-		Connection con=dbConnector.getConnect();
+		Connection con=dbConnect.getConnect();
 		PreparedStatement st=null;
 		ResultSet rs=null;
 		BankBookDTO result=null;
@@ -95,7 +106,7 @@ public class BankBookDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			dbConnector.disConnect(rs, st, con);
+			dbConnect.disConnect(rs, st, con);
 		}
 		
 		return result;
