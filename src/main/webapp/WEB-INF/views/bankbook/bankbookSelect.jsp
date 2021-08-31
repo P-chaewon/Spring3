@@ -8,5 +8,7 @@
 </head>
 <body>
 	<h1>Bankbook Select 1</h1>
+	<h1>Test : ${test}</h1>
+	<h1>BookName : ${dto.bookName}</h1> 
 </body>
 </html>
