@@ -11,17 +11,12 @@ import org.springframework.stereotype.Repository;
 
 import com.cw.s1.util.DBConnect;
 
-@Repository
+
 public class BankBookDAO {
 	
 	private DBConnect dbConnect;
-	
-	public BankBookDAO() {
-		
-	}
-	
-	@Autowired
-	public BankBookDAO(DBConnect dbConnect) {
+
+	public BankBookDAO(DBConnect dbConnect, int num, String name) {
 		this.dbConnect = dbConnect;
 	}
 	public void setDbConnect(DBConnect dbConnect) {

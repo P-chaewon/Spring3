@@ -12,7 +12,7 @@
 	<c:import url="../temp/boot_nav.jsp"></c:import>
 	<h1>List Renewal</h1>
 	<div class="col-md-8 mx-auto my-0">
-		<table class="table table-striped table-hover">
+		<table class="table table-dark table-hover">
 			<tr>
 				<th>Number</th><th>Name</th><th>Rate</th>
 			</tr>
