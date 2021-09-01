@@ -6,19 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import com.cw.s1.util.DBConnector;
+import com.cw.s1.util.DBConnect;
 
 public class BankBookDAO {
 	
-	private DBConnector dbConnector;
+	private DBConnect dbConnect;
 	
 	public BankBookDAO() {
-		dbConnector=new DBConnector();
+		dbConnect=new DBConnect();
 	}
 	
 	//setInsert
 	public int setInsert(BankBookDTO bankBookDTO) {
-		Connection con=dbConnector.getConnect();
+		Connection con=dbConnect.getConnect();
 		PreparedStatement st=null;
 		ResultSet rs=null;
 		int result = 0;
@@ -37,14 +37,14 @@ public class BankBookDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			dbConnector.disConnect(st, con);
+			dbConnect.disConnect(st, con);
 		}
 		return result;
 	}
 	
 	
 	public ArrayList<BankBookDTO> getList() {
-		Connection con=dbConnector.getConnect();
+		Connection con=dbConnect.getConnect();
 		PreparedStatement st=null;
 		ResultSet rs=null;
 		ArrayList<BankBookDTO> ar = new ArrayList<BankBookDTO>();
@@ -66,14 +66,14 @@ public class BankBookDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			dbConnector.disConnect(rs, st, con);
+			dbConnect.disConnect(rs, st, con);
 		}
 		return ar;
 	}
 	
 	public BankBookDTO getSelect(BankBookDTO bankBookDTO) {
 		
-		Connection con=dbConnector.getConnect();
+		Connection con=dbConnect.getConnect();
 		PreparedStatement st=null;
 		ResultSet rs=null;
 		BankBookDTO result=null;
@@ -95,7 +95,7 @@ public class BankBookDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			dbConnector.disConnect(rs, st, con);
+			dbConnect.disConnect(rs, st, con);
 		}
 		
 		return result;
