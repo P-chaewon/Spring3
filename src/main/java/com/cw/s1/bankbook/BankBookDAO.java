@@ -5,103 +5,45 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.cw.s1.util.DBConnect;
 
+@Repository
 public class BankBookDAO {
 	
-	private DBConnect dbConnect;
+	@Autowired
+	private SqlSession sqlSession;
+	private final String NAMESPACE="com.cw.s1.bankbook.BankBookDAO."; 
 	
-	public BankBookDAO() {
-		dbConnect=new DBConnect();
+	public int setDelete(Long bookNum) {
+		return sqlSession.delete(NAMESPACE+"setDelete", bookNum);
 	}
-	
-	//setInsert
+
 	public int setInsert(BankBookDTO bankBookDTO) {
-		Connection con=dbConnect.getConnect();
-		PreparedStatement st=null;
-		ResultSet rs=null;
-		int result = 0;
-		
-		String sql="INSERT INTO BANKBOOK (BOOKNUM, BOOKNAME, BOOKRATE, BOOKSALE) "
-				+ "VALUES (BANKBOOK_SEQ.NEXTVAL, ?, ?, ?)";
-		
-		try {
-			st=con.prepareStatement(sql);
-			st.setString(1, bankBookDTO.getBookName());
-			st.setDouble(2, bankBookDTO.getBookRate());
-			st.setInt(3, bankBookDTO.getBookSale());
-			
-			result = st.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			dbConnect.disConnect(st, con);
-		}
-		return result;
+		return sqlSession.insert(NAMESPACE+"setInsert", bankBookDTO);
 	}
 	
-	
-	public ArrayList<BankBookDTO> getList() {
-		Connection con=dbConnect.getConnect();
-		PreparedStatement st=null;
-		ResultSet rs=null;
-		ArrayList<BankBookDTO> ar = new ArrayList<BankBookDTO>();
-		
-		String sql="SELECT * FROM BANKBOOK";
-		try {
-			st=con.prepareStatement(sql);
-			rs=st.executeQuery();
-			while(rs.next()) {
-				BankBookDTO bankBookDTO = new BankBookDTO();
-				bankBookDTO.setBookNum(rs.getLong("bookNum"));
-				bankBookDTO.setBookName(rs.getString("bookName"));
-				bankBookDTO.setBookRate(rs.getDouble("bookRate"));
-				bankBookDTO.setBookSale(rs.getInt("bookSale"));
-				ar.add(bankBookDTO);
-				
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			dbConnect.disConnect(rs, st, con);
-		}
-		return ar;
+	/*
+	 * List : ArrayList, LinkedList 중 어떤 것이 들어갈 지 몰라 부모형으로 만들어주는 것 그래서 ArrayList가 아닌
+	 * List가 들어가야 됨
+	 */
+	public List<BankBookDTO> getList() {
+		return sqlSession.selectList(NAMESPACE+"getList");
 	}
 	
 	public BankBookDTO getSelect(BankBookDTO bankBookDTO) {
-		
-		Connection con=dbConnect.getConnect();
-		PreparedStatement st=null;
-		ResultSet rs=null;
-		BankBookDTO result=null;
-		
-		String sql="SELECT * FROM BANKBOOK WHERE BOOKNUM=?";
-		try {
-			st = con.prepareStatement(sql);
-			st.setLong(1, bankBookDTO.getBookNum());
-			rs = st.executeQuery();
-	
-			if(rs.next()) {
-				result = new BankBookDTO();
-				result.setBookNum(rs.getLong("bookNum"));
-				result.setBookName(rs.getString("bookName"));
-				result.setBookRate(rs.getDouble("bookRate"));
-				result.setBookSale(rs.getInt("bookSale"));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			dbConnect.disConnect(rs, st, con);
-		}
-		
-		return result;
+		return sqlSession.selectOne(NAMESPACE+"getSelect", bankBookDTO);
 		
 	}
 	
 }
+		
+		
+		
 				
 				

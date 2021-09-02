@@ -1,7 +1,10 @@
 package com.cw.s1.bankbook;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,32 +17,42 @@ import org.springframework.web.servlet.ModelAndView;
 public class BankbookController {
 	//POJP(Plain Old Java Object)
 	
-	@RequestMapping("bankbookList.do")
-	public ModelAndView list(Integer [] num) {
-		for(Integer i : num) {
-			System.out.println(i);
-		}
-		System.out.println("bankbook list");
-		ModelAndView mv = new ModelAndView();
+	@Autowired
+	private BankbookService bankbookService;
+	
+	@RequestMapping("bankbookList")
+	public ModelAndView list(ModelAndView mv) {
+		
+		List<BankBookDTO> ar = bankbookService.getList();
+		mv.addObject("list", ar);
 		mv.setViewName("bankbook/bankbookList");
 		return mv;
 	}
 	
 	@RequestMapping("bankbookSelect")
-	public void select(@RequestParam(defaultValue = "1", value = "n") Integer num, String name, Model model) {
-		
-		System.out.println("Value : "+num);
-		System.out.println("Name : "+name);
-		BankBookDTO bankBookDTO = new BankBookDTO();
-		bankBookDTO.setBookName("BookName");
-		model.addAttribute("test", "yeah");
+	public void select(BankBookDTO bankBookDTO, Model model) {
+		bankBookDTO = bankbookService.getSelect(bankBookDTO);
 		model.addAttribute("dto", bankBookDTO);
-	//	return "bankbook/bankbookSelect";
+		
 	}
 	
-	@RequestMapping("bankbookInsert.do")
+	@RequestMapping(value = "bankbookInsert", method = RequestMethod.GET)
+	public void insert() {
+		
+	}
+	
+	@RequestMapping(value = "bankbookInsert", method = RequestMethod.POST)
 	public String insert(BankBookDTO bankBookDTO) {
-		System.out.println(bankBookDTO.getBookName());		
-		return "redirect:../";
+		int result= bankbookService.setInsert(bankBookDTO);
+		
+		return "redirect: ./bankbookList";
+	}
+	
+	@RequestMapping("bankbookDelete")
+	public String delete(Long bookNum) {
+		int result = bankbookService.setDelete(bookNum);
+		
+		return "redirect:./bankbookList";
+		
 	}
 }
